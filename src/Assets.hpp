@@ -37,4 +37,7 @@ struct Assets {
     // resources/, uncomment this line and call
     // PlaySound(GetContext().assets.scoreSound) when the player scores:
     // SoundAsset scoreSound{ "score.wav" };
+    //
+    // The footstep sounds aren't here because only GameplayScreen plays them.
+    // They are members of that screen instead.
 };

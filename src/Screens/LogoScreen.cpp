@@ -9,7 +9,7 @@ LogoScreen::LogoScreen(GameContext& context, const std::string& displayMsg, floa
 void LogoScreen::Update() {
     elapsedTime += GetFrameTime();
 
-	// Transition when time is up or when user presses SPACE
+    // Transition when time is up or when user presses SPACE
     if ((elapsedTime >= displayTime) || IsKeyPressed(KEY_SPACE)) {
         RequestScreenChange<MainMenuScreen>();
     }

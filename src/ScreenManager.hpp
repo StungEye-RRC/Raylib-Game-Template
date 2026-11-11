@@ -34,7 +34,8 @@ public:
     ScreenManager(GameContext& context);
     ~ScreenManager() = default;
 
-    // Template method - hides unique_ptr, automatically injects the context
+    // Builds the first screen as T(context, args...), just like
+    // Screen::RequestScreenChange<T>().
     template<typename T, typename... Args>
     void SetInitialScreen(Args&&... args) {
         static_assert(std::is_base_of_v<Screen, T>, "T must derive from Screen");

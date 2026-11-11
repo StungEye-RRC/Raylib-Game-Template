@@ -13,18 +13,18 @@ struct GameContext;
 // Every screen is built with a reference to the GameContext, which holds the
 // game-wide systems. Screens don't know about the ScreenManager at all.
 //
-// Derived classes must implement:
+// Don't derive from Screen directly. Derive from FullScreen or Overlay (below),
+// which already implement ShouldStack(). Your screen must implement:
 //   - Update() - Handle input and game logic for this screen
 //   - Draw() const - Render this screen
-//   - ShouldStack() const - Return true if this screen should stack on top of others
 //
-// Protected methods for screen transitions:
+// Protected methods your screen can call:
 //   - RequestScreenChange<T>() - Request a transition to a new screen
 //   - RequestExit() - Request that the application exit
 //   - RequestClose() - Close this screen (overlays only)
 //   - GetContext() - Access game-wide systems (game, assets)
 //
-// Example of a derived screen can be seen below in FullScreen and Overlay classes.
+// See the files in Screens/ for complete examples.
 class Screen {
 public:
     // What a screen has asked the ScreenManager to do once its Update() returns.
@@ -63,11 +63,14 @@ protected:
     // constructor is only seen after that screen's first Update() returns, and
     // that Update() can replace it.
 
-    // Template method - automatically injects the context and hides unique_ptr from derived classes
-	// typename T                   = type of the screen to create
+    // Builds the new screen as T(context, args...), so derived screens never
+    // pass the context or deal with unique_ptr themselves. For example:
+    //   RequestScreenChange<LogoScreen>("Hello", 3.0f);
+    //
+    // typename T                  = type of the screen to create
     // typename... Args             = parameter pack (accepts 0 or more types)
     // Args&&...                    = forwarding reference. See: https://jaredmil.medium.com/c-move-semantics-pt-4-forwarding-references-std-forward-e32e95c72a7e
-	// std::forward<Args>(args)...  = unpack and forward each argument
+    // std::forward<Args>(args)...  = unpack and forward each argument
     template<typename T, typename... Args>
     void RequestScreenChange(Args&&... args) {
         static_assert(std::is_base_of_v<Screen, T>, "T must derive from Screen");

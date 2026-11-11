@@ -13,7 +13,7 @@
 //   - Game state (started/not started)
 //   - Player activity (for idle detection/animations)
 //
-// Screen can fetch a reference to the game manager like this:
+// A screen can fetch a reference to the game manager like this:
 //   auto& game = GetContext().game;
 class GameManager {
 private:

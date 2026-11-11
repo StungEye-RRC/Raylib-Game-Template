@@ -2,7 +2,6 @@
 #include "OptionsOverlay.hpp"
 #include "GameplayScreen.hpp"
 #include <raylib.h>
-#include <memory>
 
 MainMenuScreen::MainMenuScreen(GameContext& context)
     : FullScreen{ context }, selectedOption{ 0 } {
@@ -11,7 +10,9 @@ MainMenuScreen::MainMenuScreen(GameContext& context)
 void MainMenuScreen::Update() {
     // Navigate menu
     if (IsKeyPressed(KEY_UP)) {
-        selectedOption = (selectedOption - 1 + options.size()) % options.size();
+        // Adding options.size() before subtracting 1 wraps from the first
+        // option to the last without ever going below zero.
+        selectedOption = (selectedOption + options.size() - 1) % options.size();
     }
     if (IsKeyPressed(KEY_DOWN)) {
         selectedOption = (selectedOption + 1) % options.size();
@@ -43,14 +44,15 @@ void MainMenuScreen::Draw() const {
              60,
              YELLOW);
 
-	// Draw menu options
+    // Draw menu options
     int startY{ 200 };
     int spacing{ 80 };
 
-    for (int i{ 0 }; i < 3; i++) {
+    for (std::size_t i{ 0 }; i < options.size(); i++) {
+        int y{ startY + static_cast<int>(i) * spacing };
         Color textColor{ (i == selectedOption) ? YELLOW : WHITE };
         const char* prefix{ (i == selectedOption) ? "> " : "  " };
-        DrawText(prefix, 300, startY + i * spacing, 40, textColor);
-        DrawText(options[i].c_str(), 350, startY + i * spacing, 40, textColor);
+        DrawText(prefix, 300, y, 40, textColor);
+        DrawText(options[i].c_str(), 350, y, 40, textColor);
     }
 }

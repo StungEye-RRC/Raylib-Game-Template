@@ -6,7 +6,7 @@ ScreenManager::ScreenManager(GameContext& context) : shouldExit{ false }, contex
 void ScreenManager::Update() {
     if (screenStack.empty()) return;
 
-	// screenStack.back() is the top screen
+    // screenStack.back() is the top screen
     screenStack.back()->Update();
 
     // The top screen's Update() has returned, so it's now safe to act on its

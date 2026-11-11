@@ -330,6 +330,9 @@
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\footstep00.ogg" />
+    <None Include="resources\footstep01.ogg" />
+    <None Include="resources\footstep02.ogg" />
     <None Include="src\icon.ico" />
   </ItemGroup>
   <ItemGroup>

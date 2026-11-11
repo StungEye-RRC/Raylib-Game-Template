@@ -21,7 +21,7 @@ void GameManager::UpdateTimer(float deltaTime) {
         if (timeRemaining < 0.0f) {
             timeRemaining = 0.0f;
         }
-        
+
         // Also update idle timer
         timeSinceLastAction += deltaTime;
     }
