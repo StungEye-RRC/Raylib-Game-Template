@@ -301,9 +301,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\GameContext.hpp" />
+    <ClInclude Include="src\GameManager.hpp" />
+    <ClInclude Include="src\ManagedTexture.hpp" />
+    <ClInclude Include="src\Screen.hpp" />
+    <ClInclude Include="src\ScreenManager.hpp" />
+    <ClInclude Include="src\Screens\GameOverScreen.hpp" />
+    <ClInclude Include="src\Screens\GameplayScreen.hpp" />
+    <ClInclude Include="src\Screens\LogoScreen.hpp" />
+    <ClInclude Include="src\Screens\MainMenuScreen.hpp" />
+    <ClInclude Include="src\Screens\OptionsOverlay.hpp" />
+    <ClInclude Include="src\Screens\PauseOverlay.hpp" />
+    <ClInclude Include="src\TextureManager.hpp" />
     <ClInclude Include="src\resource_dir.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\GameManager.cpp" />
+    <ClCompile Include="src\Screen.cpp" />
+    <ClCompile Include="src\ScreenManager.cpp" />
+    <ClCompile Include="src\Screens\GameOverScreen.cpp" />
+    <ClCompile Include="src\Screens\GameplayScreen.cpp" />
+    <ClCompile Include="src\Screens\LogoScreen.cpp" />
+    <ClCompile Include="src\Screens\MainMenuScreen.cpp" />
+    <ClCompile Include="src\Screens\OptionsOverlay.cpp" />
+    <ClCompile Include="src\Screens\PauseOverlay.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -313,7 +334,10 @@
     <ResourceCompile Include="src\application.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="resources\wabbit_alpha.png" />
+    <Image Include="resources\zombie_0.png" />
+    <Image Include="resources\zombie_1.png" />
+    <Image Include="resources\zombie_2.png" />
+    <Image Include="resources\zombie_3.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="raylib.vcxproj">

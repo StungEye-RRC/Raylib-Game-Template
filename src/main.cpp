@@ -1,54 +1,51 @@
-/*
-Raylib example file.
-This is an example main file for a simple raylib project.
-Use this as a starting point or replace it with your code.
-
-by Jeffery Myers is marked with CC0 1.0. To view a copy of this license, visit https://creativecommons.org/publicdomain/zero/1.0/
-
-*/
-
-#include "raylib.h"
-
+#include "ScreenManager.hpp"
+#include "GameManager.hpp"
+#include "GameContext.hpp"
+#include "TextureManager.hpp"
+#include "Screens/LogoScreen.hpp"
 #include "resource_dir.h"	// utility header for SearchAndSetResourceDir
+#include <raylib.h>
 
-int main ()
+int main()
 {
-	// Tell the window to use vsync and work on high DPI displays
-	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
+    // Initialize window
+    const int SCREEN_WIDTH{ 1280 };
+    const int SCREEN_HEIGHT{ 720 };
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Gluttonous Key Smasher");
+    SetTargetFPS(60);
+	SetExitKey(KEY_NULL);  // Disable default ESC key exit
 
-	// Create the window and OpenGL context
-	InitWindow(800, 600, "Hello Raylib");
-
-	// Utility function from resource_dir.h to find the resources folder and set it as the current working directory so we can load from it
+	// Find the resources folder and make it the working directory,
+	// so assets can be loaded with bare file names like "zombie_0.png".
 	SearchAndSetResourceDir("resources");
 
-	// Load a texture from the resources directory
-	Texture wabbit = LoadTexture("wabbit_alpha.png");
-	
-	// game loop
-	while (!WindowShouldClose())		// run the loop until the user presses ESCAPE or presses the Close button on the window
-	{
-		// drawing
-		BeginDrawing();
+	{ // Extra block scope so that TextureManager is destroyed before CloseWindow()
+		// Create game systems
+		GameManager gameManager;
+		TextureManager textureManager;
 
-		// Setup the back buffer for drawing (clear color and depth buffers)
-		ClearBackground(BLACK);
+		// Create context holding all game systems
+		GameContext context{ gameManager, textureManager };
 
-		// draw some text using the default font
-		DrawText("Hello Raylib", 200,200,20,WHITE);
+		// Create screen manager with context
+		ScreenManager screenManager{ context };
+		screenManager.SetInitialScreen<LogoScreen>("Gluttonous Key Smasher", 3.0f);
 
-		// draw our texture to the screen
-		DrawTexture(wabbit, 400, 200, WHITE);
-		
-		// end the frame and get ready for the next one  (display frame, poll input, etc...)
-		EndDrawing();
-	}
+		// Main loop
+		while (!WindowShouldClose() && !screenManager.ShouldExit()) {
+			// Update
+			screenManager.Update();
 
-	// cleanup
-	// unload our texture so it can be cleaned up
-	UnloadTexture(wabbit);
+			// Draw
+			BeginDrawing();
+			ClearBackground(BLACK);
+			screenManager.Draw();
+			EndDrawing();
+		}
+	} // All three manager objects go out of scope and are destroyed here.
 
-	// destroy the window and cleanup the OpenGL context
-	CloseWindow();
-	return 0;
+    // Cleanup
+    CloseWindow();
+
+    return 0;
 }
