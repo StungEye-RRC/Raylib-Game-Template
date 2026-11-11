@@ -301,9 +301,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Assets.hpp" />
     <ClInclude Include="src\GameContext.hpp" />
     <ClInclude Include="src\GameManager.hpp" />
-    <ClInclude Include="src\ManagedTexture.hpp" />
     <ClInclude Include="src\Screen.hpp" />
     <ClInclude Include="src\ScreenManager.hpp" />
     <ClInclude Include="src\Screens\GameOverScreen.hpp" />
@@ -312,7 +312,8 @@
     <ClInclude Include="src\Screens\MainMenuScreen.hpp" />
     <ClInclude Include="src\Screens\OptionsOverlay.hpp" />
     <ClInclude Include="src\Screens\PauseOverlay.hpp" />
-    <ClInclude Include="src\TextureManager.hpp" />
+    <ClInclude Include="src\SoundAsset.hpp" />
+    <ClInclude Include="src\TextureAsset.hpp" />
     <ClInclude Include="src\resource_dir.h" />
   </ItemGroup>
   <ItemGroup>
@@ -324,6 +325,8 @@
     <ClCompile Include="src\Screens\MainMenuScreen.cpp" />
     <ClCompile Include="src\Screens\OptionsOverlay.cpp" />
     <ClCompile Include="src\Screens\PauseOverlay.cpp" />
+    <ClCompile Include="src\SoundAsset.cpp" />
+    <ClCompile Include="src\TextureAsset.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>

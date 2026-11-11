@@ -22,7 +22,7 @@ struct GameContext;
 //   - RequestScreenChange<T>() - Request a transition to a new screen
 //   - RequestExit() - Request that the application exit
 //   - RequestClose() - Close this screen (overlays only)
-//   - GetContext() - Access game-wide systems (game, textures)
+//   - GetContext() - Access game-wide systems (game, assets)
 //
 // Example of a derived screen can be seen below in FullScreen and Overlay classes.
 class Screen {

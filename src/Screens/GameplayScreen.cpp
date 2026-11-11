@@ -10,12 +10,6 @@ GameplayScreen::GameplayScreen(GameContext& context)
     : FullScreen{ context } {
 	// Every new game starts clean, however we got to this screen.
 	GetContext().game.Reset();
-
-	// Load zombie textures from resources/zombie_#.png into array:
-	for (std::size_t i{ 0 }; i < zombieTextures.size(); ++i) {
-		zombieTextures[i] = GetContext().textures.GetOrLoad(
-			"zombie_" + std::to_string(i) + ".png");
-	}
 }
 
 // Update is acting as the Controller and the GameManager is the Model.
@@ -87,11 +81,9 @@ void GameplayScreen::Draw() const {
 			GetScreenWidth() / 2 - 200, 450, 100,
 			game.GetTimeRemaining() < 3.0f ? RED : WHITE);
 
-		if (zombieTextures[zombieIndex] && zombieTextures[zombieIndex]->isValid()) {
-			DrawTexture(
-				zombieTextures[zombieIndex]->raw(),
-				0 + game.GetScore() * ZOMBIE_STEP_X,
-				GetScreenHeight() - 128, WHITE);
-		}
+		DrawTexture(
+			GetContext().assets.zombieFrames[zombieIndex],
+			static_cast<int>(game.GetScore() * ZOMBIE_STEP_X),
+			GetScreenHeight() - 128, WHITE);
 	}
 }

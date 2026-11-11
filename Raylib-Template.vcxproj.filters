@@ -21,13 +21,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Assets.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\GameContext.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\GameManager.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ManagedTexture.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Screen.hpp">
@@ -54,7 +54,10 @@
     <ClInclude Include="src\Screens\PauseOverlay.hpp">
       <Filter>Header Files\Screens</Filter>
     </ClInclude>
-    <ClInclude Include="src\TextureManager.hpp">
+    <ClInclude Include="src\SoundAsset.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextureAsset.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\resource_dir.h">
@@ -85,6 +88,12 @@
     </ClCompile>
     <ClCompile Include="src\Screens\PauseOverlay.cpp">
       <Filter>Source Files\Screens</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SoundAsset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TextureAsset.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>

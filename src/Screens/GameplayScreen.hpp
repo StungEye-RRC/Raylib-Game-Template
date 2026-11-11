@@ -1,13 +1,10 @@
 #pragma once
 
 #include "../Screen.hpp"
-#include "../TextureManager.hpp"
-#include <array>
 
 class GameplayScreen : public FullScreen {
 private:
-	std::array<TextureManager::Handle, 4> zombieTextures;
-	int zombieIndex{ 0 };
+	int zombieIndex{ 0 };  // Which of the zombie frames in Assets to draw
     static constexpr float ZOMBIE_STEP_X{ 11.0f };
 	
 public:

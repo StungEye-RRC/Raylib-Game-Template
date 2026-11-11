@@ -6,7 +6,6 @@
 
 GameOverScreen::GameOverScreen(GameContext& context)
     : FullScreen{ context } {
-	zombieTexture = GetContext().textures.GetOrLoad("zombie_0.png");
 }
 
 void GameOverScreen::Update() {
@@ -21,7 +20,8 @@ void GameOverScreen::Update() {
 
 void GameOverScreen::Draw() const {
     const auto& game = GetContext().game;
-    
+    const auto& idleZombie = GetContext().assets.zombieFrames[0];
+
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), MAROON);
 
     int gameOverWidth{ MeasureText("GAME OVER", 80) };
@@ -31,11 +31,9 @@ void GameOverScreen::Draw() const {
              80,
              YELLOW);
 
-    if (zombieTexture && zombieTexture->isValid()) {
-        DrawTexture(zombieTexture->raw(),
-            GetScreenWidth() / 2 - gameOverWidth / 2 - zombieTexture->width() - 20,
-            40, WHITE);
-    }
+    DrawTexture(idleZombie,
+        GetScreenWidth() / 2 - gameOverWidth / 2 - idleZombie.Width() - 20,
+        40, WHITE);
 
     const char* scoreText{ TextFormat("Final Score: %d", game.GetScore()) };
     int scoreWidth{ MeasureText(scoreText, 40) };
