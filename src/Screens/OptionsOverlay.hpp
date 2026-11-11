@@ -4,7 +4,7 @@
 
 class OptionsOverlay : public Overlay {
 public:
-    OptionsOverlay(ScreenManager& manager);
+    OptionsOverlay(GameContext& context);
 
     void Update() override;
     void Draw() const override;

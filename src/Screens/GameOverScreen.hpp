@@ -7,7 +7,7 @@ class GameOverScreen : public FullScreen {
 private:
     TextureManager::Handle zombieTexture;
 public:
-    GameOverScreen(ScreenManager& manager);
+    GameOverScreen(GameContext& context);
 
     void Update() override;
     void Draw() const override;

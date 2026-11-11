@@ -38,9 +38,9 @@
 //   };
 //
 // Example in GameplayScreen:
-//   GameplayScreen::GameplayScreen(ScreenManager& manager) 
-//       : FullScreen{ manager } {
-//       playerTexture = GetContext().textureManager.GetOrLoad("Assets/player.png");
+//   GameplayScreen::GameplayScreen(GameContext& context)
+//       : FullScreen{ context } {
+//       playerTexture = GetContext().textures.GetOrLoad("player.png");
 //   }
 class TextureManager {
 public:

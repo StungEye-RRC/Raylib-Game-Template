@@ -1,5 +1,4 @@
 #include "ScreenManager.hpp"
-#include "GameContext.hpp"
 
 ScreenManager::ScreenManager(GameContext& context) : shouldExit{ false }, context{ context } {
 }
@@ -9,29 +8,31 @@ void ScreenManager::Update() {
 
 	// screenStack.back() is the top screen
     screenStack.back()->Update();
-    const bool wantsClose{ screenStack.back()->WantsClose() };
-    const bool wantsExit{ screenStack.back()->WantsExit() };
-	std::unique_ptr<Screen> nextScreen{ screenStack.back()->TakeNextScreen() };
 
-    // Check if top screen wants to close
-    if (wantsClose) {
-        screenStack.pop_back();
-        return;
-    }
+    // The top screen's Update() has returned, so it's now safe to act on its
+    // request, even if that means destroying the screen.
+    Screen::Request request{ screenStack.back()->TakeRequest() };
 
-    // Check if top screen wants to exit
-    if (wantsExit) {
-        shouldExit = true;
-        return;
-    }
+    switch (request.type) {
+        case Screen::RequestType::None:
+            break;
 
-    // Check if top screen wants to transition
-    if (nextScreen) {
-        if (!nextScreen->ShouldStack()) {
-            // Replace all screens (full screen behavior)
-            screenStack.clear();
-        }
-		screenStack.push_back(std::move(nextScreen));
+        case Screen::RequestType::Close:
+            // Only overlays can ask for this, so there's a screen underneath.
+            screenStack.pop_back();
+            break;
+
+        case Screen::RequestType::Exit:
+            shouldExit = true;
+            break;
+
+        case Screen::RequestType::Change:
+            if (!request.nextScreen->ShouldStack()) {
+                // Replace all screens (full screen behavior)
+                screenStack.clear();
+            }
+            screenStack.push_back(std::move(request.nextScreen));
+            break;
     }
 }
 

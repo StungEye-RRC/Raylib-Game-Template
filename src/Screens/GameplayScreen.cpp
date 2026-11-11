@@ -2,23 +2,25 @@
 #include "MainMenuScreen.hpp"
 #include "GameOverScreen.hpp"
 #include "PauseOverlay.hpp"
-#include "../ScreenManager.hpp"
 #include "../GameContext.hpp"
 #include "../GameManager.hpp"
 #include <raylib.h>
 
-GameplayScreen::GameplayScreen(ScreenManager& manager)
-    : FullScreen{ manager } {
+GameplayScreen::GameplayScreen(GameContext& context)
+    : FullScreen{ context } {
+	// Every new game starts clean, however we got to this screen.
+	GetContext().game.Reset();
+
 	// Load zombie textures from resources/zombie_#.png into array:
 	for (std::size_t i{ 0 }; i < zombieTextures.size(); ++i) {
-		zombieTextures[i] = GetContext().textureManager.GetOrLoad(
+		zombieTextures[i] = GetContext().textures.GetOrLoad(
 			"zombie_" + std::to_string(i) + ".png");
 	}
 }
 
-// Update is acting as the Controller and the gameManager is the Model.
+// Update is acting as the Controller and the GameManager is the Model.
 void GameplayScreen::Update() {
-    auto& game = GetContext().gameManager;
+    auto& game = GetContext().game;
     
 	// If the game hasn't started yet, wait for SPACE to start
 	// or ESC to return to main menu.
@@ -64,9 +66,9 @@ void GameplayScreen::Update() {
 
 }
 
-// Draw is acting as the View for the gameManager.
+// Draw is acting as the View for the GameManager.
 void GameplayScreen::Draw() const {
-    const auto& game = GetContext().gameManager;
+    const auto& game = GetContext().game;
     
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), DARKGREEN);
 

@@ -13,10 +13,12 @@ struct GameContext;
 //   - Screen transitions (push/pop/replace)
 //   - Update/Draw delegation to active screens
 //   - Application exit requests
-//   - Providing access to game-wide context (GameManager, TextureManager, etc.)
+//   - Handing the game-wide context to the initial screen
 //
 // Screens are managed as a stack:
-//   - FullScreens replace the current screen (pop old, push new)
+//   - Only the top screen updates
+//   - Every screen draws, from the bottom of the stack to the top
+//   - FullScreens replace every screen on the stack (clear, then push)
 //   - Overlays stack on top of the current screen (push only)
 //   - Overlays can close themselves (pop)
 //
@@ -32,17 +34,15 @@ public:
     ScreenManager(GameContext& context);
     ~ScreenManager() = default;
 
-    // Template method - hides unique_ptr, automatically injects 'this'
+    // Template method - hides unique_ptr, automatically injects the context
     template<typename T, typename... Args>
     void SetInitialScreen(Args&&... args) {
         static_assert(std::is_base_of_v<Screen, T>, "T must derive from Screen");
-        screenStack.push_back(std::make_unique<T>(*this, std::forward<Args>(args)...));
+        screenStack.push_back(std::make_unique<T>(context, std::forward<Args>(args)...));
     }
 
     void Update();
     void Draw() const;
 
     bool ShouldExit() const { return shouldExit; }
-    GameContext& GetContext() { return context; }
-    const GameContext& GetContext() const { return context; }
 };

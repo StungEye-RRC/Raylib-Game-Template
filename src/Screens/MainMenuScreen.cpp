@@ -1,12 +1,11 @@
 #include "MainMenuScreen.hpp"
 #include "OptionsOverlay.hpp"
 #include "GameplayScreen.hpp"
-#include "../ScreenManager.hpp"
 #include <raylib.h>
 #include <memory>
 
-MainMenuScreen::MainMenuScreen(ScreenManager& manager)
-    : FullScreen{ manager }, selectedOption{ 0 } {
+MainMenuScreen::MainMenuScreen(GameContext& context)
+    : FullScreen{ context }, selectedOption{ 0 } {
 }
 
 void MainMenuScreen::Update() {

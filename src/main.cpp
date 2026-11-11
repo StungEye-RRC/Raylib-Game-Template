@@ -1,7 +1,5 @@
 #include "ScreenManager.hpp"
-#include "GameManager.hpp"
 #include "GameContext.hpp"
-#include "TextureManager.hpp"
 #include "Screens/LogoScreen.hpp"
 #include "resource_dir.h"	// utility header for SearchAndSetResourceDir
 #include <raylib.h>
@@ -19,13 +17,10 @@ int main()
 	// so assets can be loaded with bare file names like "zombie_0.png".
 	SearchAndSetResourceDir("resources");
 
-	{ // Extra block scope so that TextureManager is destroyed before CloseWindow()
-		// Create game systems
-		GameManager gameManager;
-		TextureManager textureManager;
-
-		// Create context holding all game systems
-		GameContext context{ gameManager, textureManager };
+	{ // Extra block scope so that the context is destroyed before CloseWindow()
+		// Create the context that owns all game-wide systems.
+		// This must happen after InitWindow() so that textures can be loaded.
+		GameContext context;
 
 		// Create screen manager with context
 		ScreenManager screenManager{ context };
@@ -42,7 +37,7 @@ int main()
 			screenManager.Draw();
 			EndDrawing();
 		}
-	} // All three manager objects go out of scope and are destroyed here.
+	} // The screen manager and then the context are destroyed here.
 
     // Cleanup
     CloseWindow();

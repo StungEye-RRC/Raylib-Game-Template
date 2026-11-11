@@ -4,7 +4,7 @@
 
 class PauseOverlay : public Overlay {
 public:
-    PauseOverlay(ScreenManager& manager);
+    PauseOverlay(GameContext& context);
 
     void Update() override;
     void Draw() const override;

@@ -14,7 +14,7 @@
 //   - Player activity (for idle detection/animations)
 //
 // Screen can fetch a reference to the game manager like this:
-//   auto& game = GetContext().gameManager;
+//   auto& game = GetContext().game;
 class GameManager {
 private:
     int score;

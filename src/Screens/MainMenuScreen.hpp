@@ -10,7 +10,7 @@ private:
     std::array<std::string, 3> options{ "Play", "Options", "Exit" };
 
 public:
-    MainMenuScreen(ScreenManager& manager);
+    MainMenuScreen(GameContext& context);
 
     void Update() override;
     void Draw() const override;

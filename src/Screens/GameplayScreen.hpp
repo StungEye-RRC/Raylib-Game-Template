@@ -11,7 +11,7 @@ private:
     static constexpr float ZOMBIE_STEP_X{ 11.0f };
 	
 public:
-    GameplayScreen(ScreenManager& manager);
+    GameplayScreen(GameContext& context);
 
     void Update() override;
     void Draw() const override;

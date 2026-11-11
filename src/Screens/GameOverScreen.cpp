@@ -1,19 +1,16 @@
 #include "GameOverScreen.hpp"
 #include "MainMenuScreen.hpp"
-#include "../ScreenManager.hpp"
 #include "../GameContext.hpp"
 #include "../GameManager.hpp"
 #include <raylib.h>
 
-GameOverScreen::GameOverScreen(ScreenManager& manager)
-    : FullScreen{ manager } {
-	zombieTexture = GetContext().textureManager.GetOrLoad("zombie_0.png");
+GameOverScreen::GameOverScreen(GameContext& context)
+    : FullScreen{ context } {
+	zombieTexture = GetContext().textures.GetOrLoad("zombie_0.png");
 }
 
 void GameOverScreen::Update() {
     if (IsKeyPressed(KEY_ENTER)) {
-        // Reset game state for next play
-        GetContext().gameManager.Reset();
         RequestScreenChange<MainMenuScreen>();
     }
 
@@ -23,7 +20,7 @@ void GameOverScreen::Update() {
 }
 
 void GameOverScreen::Draw() const {
-    const auto& game = GetContext().gameManager;
+    const auto& game = GetContext().game;
     
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), MAROON);
 

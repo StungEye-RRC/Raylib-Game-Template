@@ -65,9 +65,6 @@
     <ClCompile Include="src\GameManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Screen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\ScreenManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

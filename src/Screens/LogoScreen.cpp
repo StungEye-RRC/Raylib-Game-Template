@@ -1,10 +1,9 @@
 #include "LogoScreen.hpp"
 #include "MainMenuScreen.hpp"
-#include "../ScreenManager.hpp"
 #include <raylib.h>
 
-LogoScreen::LogoScreen(ScreenManager& manager, const std::string& displayMsg, float duration)
-    : FullScreen{ manager }, displayMsg{ displayMsg }, displayTime{ duration }, elapsedTime{ 0.0f } {
+LogoScreen::LogoScreen(GameContext& context, const std::string& displayMsg, float duration)
+    : FullScreen{ context }, displayMsg{ displayMsg }, displayTime{ duration }, elapsedTime{ 0.0f } {
 }
 
 void LogoScreen::Update() {

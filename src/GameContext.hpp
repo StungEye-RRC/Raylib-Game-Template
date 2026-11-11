@@ -1,36 +1,26 @@
 #pragma once
 
-class GameManager;
-class TextureManager;
+#include "GameManager.hpp"
+#include "TextureManager.hpp"
 
-// Context holds references to all game-wide systems.
-// Currently only GameManager and TextureManager, but could hold 
-// more in the future. (AudioManger, ParticleManager, etc.)
+// GameContext holds the game-wide systems that screens share.
 //
-// Screens can access the context via their GetContext().
-// This avoids the need to pass multiple references around.
+// What belongs in the context? Things that outlive a single screen or are
+// shared between screens. GameManager belongs here because GameOverScreen
+// reads the final score after GameplayScreen has been destroyed. Anything
+// that only one screen uses should be a member of that screen instead.
 //
-// GameContext is a simple struct with public members.
+// The context owns its members by value. main() creates it after
+// InitWindow(), and its members are destroyed along with it.
 //
-// Example of a Screen accessing the gameManager via context:
+// Every screen is given the context when it is created, and can reach it
+// with GetContext():
 //   auto& context = GetContext();
-//   context.gameManager.AddScore(10);
-// 
+//   context.game.AddScore(10);
+//
 // Or more concisely:
-//   GetContext().gameManager.AddScore(10);
+//   GetContext().game.AddScore(10);
 struct GameContext {
-    GameManager& gameManager;
-	TextureManager& textureManager;
-    
-    GameContext(GameManager& gm, TextureManager& tm) 
-        : gameManager{ gm }, textureManager{ tm } {
-    }
-
-    // Non-copyable (and non-assignable)
-    GameContext(const GameContext&) = delete;
-    GameContext& operator=(const GameContext&) = delete;
-
-    // Also non-movable to avoid rebinding references implicitly
-    GameContext(GameContext&&) = delete;
-    GameContext& operator=(GameContext&&) = delete;
+    GameManager game;
+    TextureManager textures;
 };

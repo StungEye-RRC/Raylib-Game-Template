@@ -1,9 +1,8 @@
 #include "OptionsOverlay.hpp"
-#include "../ScreenManager.hpp"
 #include <raylib.h>
 
-OptionsOverlay::OptionsOverlay(ScreenManager& manager)
-    : Overlay{ manager } {
+OptionsOverlay::OptionsOverlay(GameContext& context)
+    : Overlay{ context } {
 }
 
 void OptionsOverlay::Update() {
