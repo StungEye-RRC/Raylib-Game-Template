@@ -1,9 +1,5 @@
 #include "GameManager.hpp"
 
-GameManager::GameManager()
-    : score{ 0 }, timeRemaining{ GAME_DURATION }, gameStarted{ false }, timeSinceLastAction{ 0.0f } {
-}
-
 void GameManager::StartGame() {
     gameStarted = true;
 }
@@ -36,8 +32,7 @@ bool GameManager::IsRunning() const {
 }
 
 void GameManager::Reset() {
-    score = 0;
-    timeRemaining = GAME_DURATION;
-    gameStarted = false;
-    timeSinceLastAction = 0.0f;
+    // Replace this manager with a brand new one, so every member goes back
+    // to its starting value from GameManager.hpp.
+    *this = GameManager{};
 }

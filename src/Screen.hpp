@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <type_traits>
+#include <utility>
 
 struct GameContext;
 
@@ -67,7 +68,7 @@ protected:
     // pass the context or deal with unique_ptr themselves. For example:
     //   RequestScreenChange<LogoScreen>("Hello", 3.0f);
     //
-    // typename T                  = type of the screen to create
+    // typename T                   = type of the screen to create
     // typename... Args             = parameter pack (accepts 0 or more types)
     // Args&&...                    = forwarding reference. See: https://jaredmil.medium.com/c-move-semantics-pt-4-forwarding-references-std-forward-e32e95c72a7e
     // std::forward<Args>(args)...  = unpack and forward each argument
@@ -98,36 +99,19 @@ public:
     }
 };
 
-// Full-screen screens replace the entire display.
-//
-// Use FullScreen for major application states like:
-//   - Logo/splash screens
-//   - Main menu
-//   - Gameplay
-//   - Game over screen
-//
-// FullScreen automatically implements ShouldStack() to return false,
-// meaning transitioning to a FullScreen will replace the current screen
-// rather than stacking on top of it.
+// A FullScreen replaces every screen on the stack. Use it for the major
+// states of the game: logo, main menu, gameplay, game over.
 class FullScreen : public Screen {
 public:
     FullScreen(GameContext& context) : Screen{ context } {}
     bool ShouldStack() const final { return false; }
 };
 
-// Overlay screens stack on top of the current screen.
+// An Overlay is pushed on top of the current screen, which stays underneath
+// and carries on once the overlay closes. Use it for temporary screens such
+// as a pause menu, an options menu or a dialog box.
 //
-// Use Overlay for temporary screens that don't replace the underlying screen:
-//   - Pause menu
-//   - Options/settings menu
-//   - Dialog boxes
-//   - In-game menus
-//
-// Overlay automatically implements ShouldStack() to return true,
-// meaning the previous screen remains in the stack and can be resumed.
-//
-// Overlays can call RequestClose() to pop themselves off the stack
-// and return to the previous screen.
+// Only an overlay can call RequestClose() to pop itself off the stack.
 class Overlay : public Screen {
 protected:
     void RequestClose() {

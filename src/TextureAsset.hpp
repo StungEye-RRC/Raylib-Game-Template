@@ -11,10 +11,9 @@
 // magenta square with a black border is used instead. A missing texture is
 // then easy to spot on screen, and the game keeps running.
 //
-// IMPORTANT: Only create a TextureAsset after InitWindow(), and make sure it is
-// destroyed before CloseWindow(). Textures live on the graphics card, which
-// raylib only sets up once the window exists. This is why a TextureAsset must
-// never be a global or static variable. See Assets.hpp for where to put them.
+// Only create a TextureAsset after InitWindow(), and make sure it is destroyed
+// before CloseWindow(). Textures live on the graphics card, which raylib only
+// sets up once the window exists. See Assets.hpp for where to put them.
 //
 // Example as a member of a screen:
 //   class TitleScreen : public FullScreen {

@@ -17,16 +17,15 @@
 //   auto& game = GetContext().game;
 class GameManager {
 private:
-    int score;
-    float timeRemaining;
-    bool gameStarted;
-    float timeSinceLastAction;
     static constexpr float GAME_DURATION{ 10.0f };
     static constexpr float IDLE_TIMEOUT{ 0.4f };
 
-public:
-    GameManager();
+    int score{ 0 };
+    float timeRemaining{ GAME_DURATION };
+    bool gameStarted{ false };
+    float timeSinceLastAction{ 0.0f };
 
+public:
     // Game logic methods
     void StartGame();
     void AddScore(int points);
@@ -39,5 +38,4 @@ public:
     int GetScore() const { return score; }
     float GetTimeRemaining() const { return timeRemaining; }
     bool HasStarted() const { return gameStarted; }
-    float GetGameDuration() const { return GAME_DURATION; }
 };

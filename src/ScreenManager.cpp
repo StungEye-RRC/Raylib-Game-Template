@@ -1,8 +1,5 @@
 #include "ScreenManager.hpp"
 
-ScreenManager::ScreenManager(GameContext& context) : shouldExit{ false }, context{ context } {
-}
-
 void ScreenManager::Update() {
     if (screenStack.empty()) return;
 
@@ -28,7 +25,7 @@ void ScreenManager::Update() {
 
         case Screen::RequestType::Change:
             if (!request.nextScreen->ShouldStack()) {
-                // Replace all screens (full screen behavior)
+                // A FullScreen replaces every screen on the stack.
                 screenStack.clear();
             }
             screenStack.push_back(std::move(request.nextScreen));

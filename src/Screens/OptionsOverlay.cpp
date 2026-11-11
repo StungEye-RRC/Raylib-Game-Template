@@ -8,7 +8,7 @@ OptionsOverlay::OptionsOverlay(GameContext& context)
 void OptionsOverlay::Update() {
     // This is a fake options screen for demonstration purposes.
     if (IsKeyPressed(KEY_ESCAPE)) {
-        RequestClose();  // Signal overlay should close
+        RequestClose();
     }
 }
 

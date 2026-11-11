@@ -5,7 +5,6 @@
 #include "../GameContext.hpp"
 #include "../GameManager.hpp"
 #include <raylib.h>
-#include <iostream>
 
 GameplayScreen::GameplayScreen(GameContext& context)
     : FullScreen{ context } {
@@ -40,13 +39,13 @@ void GameplayScreen::Update() {
     timeSinceFootstep += GetFrameTime();
 
     if (IsKeyPressed(KEY_SPACE)) {
-        game.AddScore(1);  // This resets idle timer internally
+        game.AddScore(1);
 
         // Play a random footstep, unless the last one was too recent.
         if (timeSinceFootstep >= FOOTSTEP_COOLDOWN) {
             int lastIndex{ static_cast<int>(footsteps.size()) - 1 };
             PlaySound(footsteps[GetRandomValue(0, lastIndex)]);
-            // Offset the next footstep by -0.1 to 0.1 seconds. 
+            // Offset the next footstep by -0.1 to 0.1 seconds.
             timeSinceFootstep = GetRandomValue(-1,1) / 10.0f;
         }
 

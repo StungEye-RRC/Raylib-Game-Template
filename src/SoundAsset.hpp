@@ -7,13 +7,12 @@
 // A SoundAsset loads its sound when it is created and unloads it when it is
 // destroyed, so you never call LoadSound() or UnloadSound() yourself.
 //
-// If the file can't be loaded, a warning is written to the log and a short
-// silent sound is used instead, so PlaySound() still works and the game keeps
-// running.
+// If the file can't be loaded, a warning is written to the log and the sound
+// is silent. PlaySound() does nothing with a sound that failed to load, so the
+// game keeps running.
 //
-// IMPORTANT: Only create a SoundAsset after InitAudioDevice(), and make sure it
-// is destroyed before CloseAudioDevice(). This is why a SoundAsset must never
-// be a global or static variable. See Assets.hpp for where to put them.
+// Only create a SoundAsset after InitAudioDevice(), and make sure it is
+// destroyed before CloseAudioDevice(). See Assets.hpp for where to put them.
 //
 // Example:
 //   SoundAsset jump{ "jump.wav" };
