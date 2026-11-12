@@ -1,161 +1,203 @@
-# Raylib-Quickstart
-A simple cross platform template for setting up a project with the bleeding edge raylib code.
-Works with C or C++.
+# Gluttonous Key Smasher - Raylib Demo Game
 
-# Basic Setup
-Download this repository to get started.
+Gluttonous Key Smasher is a silly little game I made using C++20 with [raylib](https://www.raylib.com/) to demonstrate a few game dev architectural patterns. Smash dat space bar as many times as you can in ten seconds sending a zombie stumbling across the screen.
 
-You can download the zip file of the repository from the Green Code button on github. This is the simplest way to get the template to start from.
-Once you have downloaded the template, rename it to your project name.
+## Build the Example Game
 
-or
+1. Run `build-VisualStudio2026.bat`.
+2. Open the newly generated `.slnx` file.
 
-Clone the repository with git, from the url
+The generated solution and the built exe will be named after the project folder.
+
+## The Codez
+
 ```
-https://github.com/raylib-extras/raylib-quickstart.git
+src/
+  main.cpp                The main game loop.
+  GameContext.hpp         The state and assets shared between screens.
+  GameManager.hpp/.cpp    The game rules and state.
+  Assets.hpp              Textures and sounds shared between screens.
+  TextureAsset.hpp/.cpp   An RAII wrapper for a Raylib 2D Texture.
+  SoundAsset.hpp/.cpp     An RAII wrapper for a Raylib Sound.
+  Screen.hpp              Base classes for Screen, FullScreen and Overlay
+  ScreenManager.hpp/.cpp  The screen stack manager.
+  Screens/                One class per screen.
+  resource_dir.h          Finds the resources/ folder (from raylib-quickstart)
+resources/                Images and sounds the game loads.
 ```
 
-If you are using a command line git client you can use the command below to download and rename the template in one step
+### Screens and Overlays
+
+The example game is built out of screens. Each screen class has an `Update()` that can mutate screen state and a `Draw()` that can't mutate the screen state.
+
+The `ScreenManager` keeps the screens in a stack:
+
+- Only the top screen updates or reads input.
+- Every screen draws, from the bottom of the stack to the top. (That's how the pause overlay is displayed over top of the paused game play screen.)
+- The screen manager automatically calls a screen's `Update()` and `Draw()`.
+
+There are two kinds of screens:
+
+- When loaded, a `FullScreen` replaces everything on the stack. The logo, main menu, gameplay and game-over screens are full screens.
+- When loaded, an `Overlay` is pushed on top of the current screen, which stays underneath and carries on once the overlay closes. The options and pause screens are overlays.
+
+Screens can load other screens through requests:
+
+```cpp
+RequestScreenChange<GameOverScreen>();  // Go to another screen
+RequestClose();                         // Overlays only. Pops screen stack. Return to previous screen.
+RequestExit();                          // Quit the game
 ```
-git clone https://github.com/raylib-extras/raylib-quickstart.git [name-for-your-project-here]
-```
 
-# Naming projects
-* Replace the placeholder with your desired project name when running the git clone command above.
-* __Do not name your game project 'raylib', it will conflict with the raylib library.__
-* If you have used custom game name with __git clone__, there is no need to rename it again.
+Requests should be made from a screen's `Update()` method.
 
+Here's an example minimal screen. It's a `FullScreen` that requests a transition to the `MainMenuScreen` when the user presses enter.
 
-## Supported Platforms
-Quickstart supports the main 3 desktop platforms:
-* Windows
-* Linux
-* MacOS
+```cpp
+class TitleScreen : public FullScreen {
+public:
+    TitleScreen(GameContext& context) : FullScreen{ context } {}
 
-# VSCode Users (all platforms)
-*Note* You must have a compiler toolchain installed in addition to vscode.
-
-1. Download the quickstart
-2. Rename the folder to your game name
-3. Open the folder in VSCode
-4. Run the build task ( CTRL+SHIFT+B or F5 )
-5. You are good to go
-
-# Windows Users
-There are two compiler toolchains available for windows, MinGW-W64 (a free compiler using GCC), and Microsoft Visual Studio
-## Using MinGW-W64
-* Rename the folder to your game name
-* Double click the `build-MinGW-W64.bat` file
-* CD into the folder in your terminal
-  * if you are using the W64devkit and have not added it to your system path environment variable, you must use the W64devkit.exe terminal, not CMD.exe
-  * If you want to use cmd.exe or any other terminal, please make sure that gcc/mingw-W64 is in your path environment variable.
-* run `make`
-* You are good to go
-
-### Note on MinGW-64 versions
-Make sure you have a modern version of MinGW-W64 (not mingw).
-The best place to get it is from the W64devkit from
-https://github.com/skeeto/w64devkit/releases
-
-or the version installed with the raylib installer
-
-#### If you have installed raylib from the installer
-Make sure you have added the path
-
-`C:\raylib\w64devkit\bin`
-
-To your path environment variable so that the compiler that came with raylib can be found.
-
-DO NOT INSTALL ANOTHER MinGW-W64 from another source such as msys2, you don't need it.
-
-## Microsoft Visual Studio 2026
-* Rename the folder to your game name
-* Run `build-VisualStudio2026.bat`
-* double click the `.slnx` file that is generated
-* develop your game
-* you are good to go
-
-# Linux Users
-* Rename the folder to your game name
-* CD into the build folder
-* run `./premake5 gmake`
-* CD back to the root
-* run `make`
-* you are good to go
-
-# MacOS Users
-* Rename the folder to your game name
-* CD into the build folder
-* run `./premake5.osx gmake`
-* CD back to the root
-* run `make`
-* you are good to go
-
-# Output files
-The built code will be in the bin dir
-
-# Working directories and the resources folder
-The example uses a utility function from `path_utils.h` that will find the resources dir and set it as the current working directory. This is very useful when starting out. If you wish to manage your own working directory you can simply remove the call to the function and the header.
-
-# Changing to C++
-Simply rename `src/main.c` to `src/main.cpp` and re-run the steps above and do a clean build.
-
-# Using your own code
-Simply remove `src/main.c` and replace it with your code, and re-run the steps above and do a clean build.
-
-# Building for other OpenGL targets
-If you need to build for a different OpenGL version than the default (OpenGL 3.3) you can specify an OpenGL version in your premake command line. Just modify the bat file or add the following to your command line
-
-## For OpenGL 1.1
-`--graphics=opengl11`
-
-## For OpenGL 2.1
-`--graphics=opengl21`
-
-## For OpenGL 4.3
-`--graphics=opengl43`
-
-## For OpenGLES 2.0
-`--graphics=opengles2`
-
-## For OpenGLES 3.0
-`--graphics=opengles3`
-
-## For Software Rendering
-`--graphics=software`
-
-*Note*
-Sofware rendering does not work with glfw, use Win32 or SDL platforms
-`--backend=win32`
-
-# Adding External Libraries 
-
-Quickstart is intentionally minimal — it only includes what is required to compile and run a basic raylib project.  
-If you want to use extra libraries, you can add them to the `build/premake5.lua` file yourself using the links function.
-
-You can find the documentation for the links function here https://premake.github.io/docs/links/
-
-### Example: adding the required libraries for tinyfiledialogs on Windows
-tinyfiledialogs requires extra Windows system libraries.
-The premake file uses filters to define options that are platform specific
-https://premake.github.io/docs/Filters/
-
-Using the windows filter adds these libraries only to the windows build.
-```
-filter "system:windows"
-    links {
-        "Comdlg32",
-        "User32",
-        "Ole32",
-        "Shell32"
+    void Update() override {
+        if (IsKeyPressed(KEY_ENTER)) {
+            RequestScreenChange<MainMenuScreen>();
+        }
     }
+
+    void Draw() const override {
+        DrawText("My Game", 100, 100, 40, WHITE);
+    }
+};
 ```
 
-### Cross-platform reminder
-If you add a library, make sure to add its required dependencies for all platforms you plan to support (Windows, Linux, MacOS).
-Different libraries will have different dependencies on different platforms.
+If we wanted this to be the app's initial screen we could load it like this in `main.cpp`:
 
+```cpp
+ GameContext context;
+ ScreenManager screenManager{ context };
+ screenManager.SetInitialScreen<TitleScreen>();
+```
 
-# License
-Raylib-Quickstart by Jeffery Myers is marked with CC0 1.0. To view a copy of this license, visit https://creativecommons.org/publicdomain/zero/1.0/
+### Screens With Constructor Parameters
 
+A screen's constructor can take extra parameters after the `GameContext`:
+
+```cpp
+class LogoScreen : public FullScreen {
+public:
+    LogoScreen(GameContext& context, const std::string& displayMsg, float duration);
+
+    // Rest of class goes here.
+};
+```
+
+When you load the screen you only pass the extra arguments. The context is passed in for you:
+
+```cpp
+RequestScreenChange<LogoScreen>("Hello World", 3.0f);
+// or
+SetInitialScreen<LogoScreen>("Greetings Earthlings", 4.2f);
+```
+
+### The GameContext
+
+Screens share state with other screens with a `GameContext`, which they access through their `GetContext()` method. In our example game, the `GameContext` holds a `GameManger` (which holds the game logic and game state) and `Assets` (which are preloaded image and sound files):
+
+```cpp
+struct GameContext {
+    GameManager game;
+    Assets assets;
+};
+```
+
+#### What Goes in the GameContext
+
+The rule for what goes in the `GameContext` is things that outlive a single screen, or that more than one screen needs access to. Anything that only one screen uses should be a member of that screen instead.
+
+In our example game, `GameManager` is in the context because the game-over screen reads its final score after the gameplay screen has been destroyed. `GameManager` is the "model" of the example game. It holds the score, the countdown timer, and whether the zombie is running. `GameplayScreen::Update()` changes it and `GameplayScreen::Draw()` shows it. A new `GameplayScreen` calls `game.Reset()` in its constructor, so every play starts a fresh game (score = 0, time remaining = full, etc).
+
+### Texture and sound Assets
+
+Raylib's `LoadTexture()` must be matched (later in the program) by an `UnloadTexture()`, and `LoadSound()` by an `UnloadSound()`. If you forget to unload, or do so at the wrong time, you can cause memory leaks and crashes. Our custom `TextureAsset` and `SoundAsset` take care of this. They load the asset in their constructor and unload in their destructor, so you never call the load and unload functions yourself. This is that [RAII](https://en.cppreference.com/cpp/language/raii) thing I've been telling you about! A better name for it might be [Scope-Bound Resource Management or SBRM](https://stackoverflow.com/questions/2321511/what-is-meant-by-resource-acquisition-is-initialization-raii). We can pronounce it ess-broom! ;)
+
+```cpp
+TextureAsset logo{ "logo.png" };
+// Notice how we can just use it in places where raylib expects a Texture2D!!!
+DrawTexture(logo, 100, 100, WHITE);
+
+SoundAsset jump{ "jump.wav" };
+PlaySound(jump);
+```
+
+In the example game the zombie textures live in an `Assets` object in the `GameContext`, but the sounds live in the `GameplayScreen`. This is because the images are needed by multiple screens and are fetched using `GetContext().assets` and the sounds are only used during game play.
+
+Textures and sounds can only be loaded after the raylib window and audio device have been initialized, and they must be unloaded before we close the window and the audio device.
+
+This is why `main()` runs in this order:
+
+```cpp
+InitWindow(...);       // 1. Texture2Ds need the window to be initialized.
+InitAudioDevice();     // 2. Sounds need the audio to be initialized.
+SearchAndSetResourceDir("resources"); // Set the asset directory.
+{
+    GameContext context;   // 3. Loads every asset in Assets
+    // da main loop        // 4. Loaded assets can be used in the main loop. Other assets can be loaded here too.
+}                          // 5. The context is destroyed here, unloading the assets (ess-broom!)
+CloseAudioDevice();    // 6. Only now is it safe to close audio
+CloseWindow();         // 7. And now it's safe to close the window
+```
+
+The extra `{ }` block makes sure the context and its assets are destroyed before the audio device and the window are closed. This works because C++ has block-level scoping.
+
+#### Adding Assets Used By Multiple Screens
+
+To add a sound that several screens use, put the file in `resources/` and add a member to `Assets`:
+
+```cpp
+struct Assets {
+    // Other assets go here.
+
+    SoundAsset scoreSound{ "score.wav" };
+};
+```
+
+This sound can now be played by any `Screen` using `PlaySound(GetContext().assets.scoreSound)`.
+
+#### Missing Asset files
+
+If a texture can't be loaded, you get a 32×32 magenta square loaded in its place.
+
+If a sound can't be loaded, playing it does nothing.
+
+In both cases a warning message is printed in the console window of a Debug build with the name of the file that failed to load.
+
+### The Resources Folder
+
+Put your images and sounds in `resources/`. At startup, `SearchAndSetResourceDir("resources")` finds that folder and makes it the working directory. This means your program will work whether you run from Visual Studio or double-click the exe in `bin/`. It also means that you load files by name alone: `"zombie_0.png"`, not `"resources/zombie_0.png"`.
+
+## Making a Game From This Template
+
+1. Rename the folder to your game's name before you first run the `build-VisualStudio2026.bat`. The solution and the exe are named after the folder. Don't call it `raylib` 'cause that'll clash with the raylib library itself. If you rename it later, the `.bat` makes a new `.slnx` and `.vcxproj` with the new name, and you can delete the ones with the old name.
+2. Open the project using the `.slnx` that was generated by`build-VisualStudio2026.bat`.
+3. Change the window title and size in `main.cpp`, the logo text passed to `LogoScreen`, and the title drawn in `MainMenuScreen.cpp`. You can also remove the `LogoScreen` and use the `MainMenuScreen` or a custom one as your initial screen.
+4. Replace `GameManager` with your game's rules and state. For example the board logic and state from Frogs and Toads. Rename it if you want to and update `GameContext` to match the new name.
+5. Replace the art by putting your asset files in `resources/` and then change the members of `Assets`.
+6. Rewrite `GameplayScreen` and `GameOverScreen` too. The other screens (logo, main menu, pause) are ready for you to use or change. The options screen is fake right now.
+
+### Adding New Source Code
+
+Create new files by hitting Ctrl-n, picking "Visual C++" on the left and then the type you want. Then save the file from "File" => "Save As...".
+
+Save the new files to the `src/` folder (example: `src/Screens/GremlinScreen.cpp`) and then run `build-VisualStudio2026.bat`.
+
+Be careful with Visual Studio's "Add" => "New Item". By default it saves the file in the Solution root and the next time the project is regenerated that file will get removed from the build.
+
+Run the `.bat` file after renaming or deleting files too.
+
+## Credits and Licences
+
+- The zombie comes from [Platformer Characters](https://kenney.nl/assets/platformer-characters) and the footsteps from [RPG Audio](https://kenney.nl/assets/rpg-audio) and are [CC0 licenced](https://creativecommons.org/publicdomain/zero/1.0/). Thanks Kenney!
+- This project started out from the [raylib-quickstart](https://github.com/raylib-extras/raylib-quickstart) by Jeffery Myers, which is also [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/).
+- `src/resource_dir.h` is from raylib-extras by Jeffery Myers, under the [MIT licence](https://opensource.org/license/mit).
+- [raylib](https://github.com/raysan5/raylib) by Ramon Santamaria and contributors, under the [zlib licence](https://www.zlib.net/zlib_license.html).
+- And as always, my code is [released free and unencumbered into the public domain](https://unlicense.org/). Information wants to be freeeeeeeeee.
