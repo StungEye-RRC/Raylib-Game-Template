@@ -9,7 +9,7 @@
 struct GameContext;
 
 // Manages the stack of screens:
-//   - Only the top screen updates
+//   - Only the top screen Update()s
 //   - Every screen draws, from the bottom of the stack to the top
 //   - FullScreens replace every screen on the stack (clear, then push)
 //   - Overlays stack on top of the current screen (push only)

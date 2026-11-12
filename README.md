@@ -110,6 +110,21 @@ struct GameContext {
 };
 ```
 
+#### Access GameContext and GameManager
+
+When accessing the `GameContext` and the `GameManager` from a screen, you will often want to do so by reference:
+
+```cpp
+auto& context = GetContext();
+auto& game = context.game;
+```
+
+You can also use them directly:
+
+```cpp
+GetContext().game.AddScore(10);
+```
+
 #### What Goes in the GameContext
 
 The rule for what goes in the `GameContext` is things that outlive a single screen, or that more than one screen needs access to. Anything that only one screen uses should be a member of that screen instead.

@@ -7,7 +7,7 @@
 // GameplayScreen's Draw() acts as the "View".
 //
 // The properties and behaviour of the game manager will depend
-// on your game. This particular manager tracks:
+// on your game. This manager tracks:
 //   - Player score
 //   - Game timer (countdown to game over)
 //   - Game state (started/not started)

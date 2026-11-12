@@ -34,5 +34,7 @@ bool GameManager::IsRunning() const {
 void GameManager::Reset() {
     // Replace this manager with a brand new one, so every member goes back
     // to its starting value from GameManager.hpp.
+    // 
+    // Did you know you could do this?!
     *this = GameManager{};
 }

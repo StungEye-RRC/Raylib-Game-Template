@@ -8,7 +8,7 @@
 
 GameplayScreen::GameplayScreen(GameContext& context)
     : FullScreen{ context } {
-    // Every new game starts clean, however we got to this screen.
+    // Every new game starts with a game reset. 
     GetContext().game.Reset();
 }
 

@@ -12,7 +12,7 @@ struct GameContext;
 // The ScreenManager maintains a stack of screens and delegates Update/Draw to them.
 //
 // Every screen is built with a reference to the GameContext, which holds the
-// game-wide systems. Screens don't know about the ScreenManager at all.
+// game-wide systems and assets. Screens don't know about the ScreenManager.
 //
 // Don't derive from Screen directly. Derive from FullScreen or Overlay (below),
 // which already implement ShouldStack(). Your screen must implement:
@@ -45,7 +45,7 @@ private:
         request.nextScreen = std::move(nextScreen);
     }
 
-    // Overlay is a friend so that it can use SetRequest() for RequestClose().
+    // Overlay is a friend so it can use private SetRequest() for its RequestClose().
     // No other screen can close itself, so a FullScreen can't leave the
     // screen stack empty.
     friend class Overlay;
@@ -55,11 +55,6 @@ protected:
     GameContext& GetContext() { return context; }
     const GameContext& GetContext() const { return context; }
 
-    // Requests are deferred. The ScreenManager applies a request after this
-    // screen's Update() returns, because a screen must never be destroyed in
-    // the middle of its own Update(). If a screen makes more than one request
-    // in the same Update(), the last one wins.
-    //
     // Make requests from Update(), not from a constructor. A request made in a
     // constructor is only seen after that screen's first Update() returns, and
     // that Update() can replace it.

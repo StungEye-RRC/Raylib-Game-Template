@@ -8,12 +8,11 @@
 // is destroyed, so you never call LoadTexture() or UnloadTexture() yourself.
 //
 // If the file can't be loaded, a warning is written to the log and a small
-// magenta square with a black border is used instead. A missing texture is
-// then easy to spot on screen, and the game keeps running.
+// magenta square is used instead. 
 //
 // Only create a TextureAsset after InitWindow(), and make sure it is destroyed
-// before CloseWindow(). Textures live on the graphics card, which raylib only
-// sets up once the window exists. See Assets.hpp for where to put them.
+// before CloseWindow(). Textures live on the GPU, which raylib can only
+// set up once the window exists. See Assets.hpp for where to put them.
 //
 // Example as a member of a screen:
 //   class TitleScreen : public FullScreen {
@@ -37,8 +36,7 @@ public:
     TextureAsset& operator=(const TextureAsset&) = delete;
 
     // Lets a TextureAsset be passed straight to raylib functions that expect a
-    // Texture2D, like DrawTexture(myAsset, x, y, WHITE). The trade-off is that
-    // the conversion happens quietly, so it's less obvious what is being passed.
+    // Texture2D, like DrawTexture(myAsset, x, y, WHITE). 
     operator const Texture2D&() const { return texture; }
 
     int Width() const { return texture.width; }

@@ -9,7 +9,7 @@ TextureAsset::TextureAsset(const char* path)
         Image placeholder{ GenImageColor(32, 32, MAGENTA) };
         ImageDrawRectangleLines(&placeholder, 0, 0, 32, 32, BLACK);
         texture = LoadTextureFromImage(placeholder);
-        UnloadImage(placeholder);  // The texture has its own copy on the graphics card.
+        UnloadImage(placeholder);  // The texture has its own copy now on the graphics card.
     }
 }
 

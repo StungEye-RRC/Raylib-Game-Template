@@ -19,9 +19,8 @@ private:
     };
 
     // The shortest time between two footsteps, in seconds. Each footstep is
-    // about a quarter of a second long, so without this, mashing SPACE piles
-    // up overlapping footsteps into a clatter. Set it to 0 to hear one on
-    // every press.
+    // about a quarter of a second long, so without this, mashing SPACE plays
+    // overlapping footsteps.
     static constexpr float FOOTSTEP_COOLDOWN{ 0.50f };
     float timeSinceFootstep{ FOOTSTEP_COOLDOWN };
 
