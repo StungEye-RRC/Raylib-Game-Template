@@ -6,13 +6,14 @@
 
 // Assets holds the textures and sounds that are used across the game.
 //
-// Where should an asset live?
-//   - Add here if asset is used by more than one screen. Assets is part of the
-//     GameContext, so every screen can reach it with GetContext().assets.
-//   - Assets only used in a single screen should be TextureAsset or SoundAsset 
-//     members of that screen. 
+// Where should you load and store your assets?
+//   - Add here if the asset is used by more than one screen. An instance of 
+//     this Assets class is part of the GameContext, so every screen can reach 
+//     it by calling: GetContext().assets
+//   - Assets that are only used in a single screen should be TextureAssets 
+//     or SoundAssets that are stored as members of that screen. 
 //   - Never make an asset a global or static variable. It would be created
-//     before InitWindow()/InitAudioDevice() and would fail to load.
+//     before InitWindow() / InitAudioDevice() and would fail to load.
 //
 // Every member of Assets is loaded when theGameContext is created in main(),
 // and is unloaded when the GameContext is destroyed. That's why Assets doesn't
