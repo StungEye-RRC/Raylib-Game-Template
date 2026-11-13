@@ -14,8 +14,10 @@ struct GameContext;
 // Every screen is built with a reference to the GameContext, which holds the
 // game-wide systems and assets. Screens don't know about the ScreenManager.
 //
-// Don't derive from Screen directly. Derive from FullScreen or Overlay (below),
-// which already implement ShouldStack(). Your screen must implement:
+// Don't derive/inherit from Screen directly. Instead, derive from FullScreen or 
+// Overlay (they are in this file too), which already implement ShouldStack(). 
+//
+// Your screen must implement:
 //   - Update() - Handle input and game logic for this screen
 //   - Draw() const - Render this screen
 //
