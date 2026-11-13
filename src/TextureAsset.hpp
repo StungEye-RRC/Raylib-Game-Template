@@ -26,7 +26,8 @@
 //   };
 //
 // A TextureAsset can't be copied. Each one owns its texture, and two copies
-// would both try to unload the same texture.
+// would both try to unload the same texture. As such, the copy constructor
+// and assignment operator have been deleted below.
 class TextureAsset {
 public:
     explicit TextureAsset(const char* path);
