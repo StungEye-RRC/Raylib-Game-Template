@@ -26,19 +26,21 @@ src/
 resources/                Images and sounds the game loads.
 ```
 
+Note: In the solutions explore the header files have been separate from the implementation files using filters. Within each of those filters there are sub-filters for screen files.
+
 ### Screens and Overlays
 
-The example game is built out of screens. Each screen class has an `Update()` that can mutate screen state and a `Draw()` that can't mutate the screen state.
+The example game is built out of screens. Each screen class has an `Update()` that can mutate state and a `Draw()` that shouldn't mutate state.
 
 The `ScreenManager` keeps the screens in a stack:
 
 - Only the top screen updates or reads input.
 - Every screen draws, from the bottom of the stack to the top. (That's how the pause overlay is displayed over top of the paused game play screen.)
-- The screen manager automatically calls a screen's `Update()` and `Draw()`.
+- The screen manager automatically calls the top screen's `Update()` and the `Draw()` of all screens.
 
 There are two kinds of screens:
 
-- When loaded, a `FullScreen` replaces everything on the stack. The logo, main menu, gameplay and game-over screens are full screens.
+- When loaded, a `FullScreen` replaces everything on the stack. In the example app, the logo, main menu, gameplay and game-over screens are full screens.
 - When loaded, an `Overlay` is pushed on top of the current screen, which stays underneath and carries on once the overlay closes. The options and pause screens are overlays.
 
 Screens can load other screens through requests:
@@ -73,9 +75,9 @@ public:
 If we wanted this to be the app's initial screen we could load it like this in `main.cpp`:
 
 ```cpp
- GameContext context;
- ScreenManager screenManager{ context };
- screenManager.SetInitialScreen<TitleScreen>();
+GameContext context;
+ScreenManager screenManager{ context };
+screenManager.SetInitialScreen<TitleScreen>();
 ```
 
 ### Screens With Constructor Parameters
@@ -112,7 +114,7 @@ struct GameContext {
 
 #### Access GameContext and GameManager
 
-When accessing the `GameContext` and the `GameManager` from a screen, you will often want to do so by reference:
+When accessing the `GameContext` and the `GameManager` from a screen, you will want to do so by reference:
 
 ```cpp
 auto& context = GetContext();
@@ -125,11 +127,18 @@ You can also use them directly:
 GetContext().game.AddScore(10);
 ```
 
+Or, if you want to protect them from change, use const references:
+
+```cpp
+const auto& context = GetContext();
+const auto& game = context.game;
+```
+
 #### What Goes in the GameContext
 
 The rule for what goes in the `GameContext` is things that outlive a single screen, or that more than one screen needs access to. Anything that only one screen uses should be a member of that screen instead.
 
-In our example game, `GameManager` is in the context because the game-over screen reads its final score after the gameplay screen has been destroyed. `GameManager` is the "model" of the example game. It holds the score, the countdown timer, and whether the zombie is running. `GameplayScreen::Update()` changes it and `GameplayScreen::Draw()` shows it. A new `GameplayScreen` calls `game.Reset()` in its constructor, so every play starts a fresh game (score = 0, time remaining = full, etc).
+In our example game, `GameManager` is in the context because the game-over screen reads its final score after the gameplay screen has been destroyed. `GameManager` is the "model" of the example game. It holds the score, the countdown timer, and whether the zombie is running. `GameplayScreen::Update()` changes it and `GameplayScreen::Draw()` displays aspects of it. A new `GameplayScreen` calls `game.Reset()` in its constructor, so every play starts a fresh game (score = 0, time remaining = full, etc).
 
 ### Texture and sound Assets
 
